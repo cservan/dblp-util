@@ -20,6 +20,6 @@ $ mkdir build
 $ cd build
 $ cmake ../
 $ make
-$ ./extract_and_convert_to_json
+$ ./extract_and_convert_to_json [path-to-the-xml-file] > extracted_data.json
 ```
 
