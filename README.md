@@ -10,7 +10,7 @@ $ git clone https://github.com/yuki-koyama/dblp-util.git --recursive
 ### Download and Unarchive XML Data
 
 ```
-$ python3 download.py
+$ python3 download_and_unarchive.py
 ```
 
 ### Extract Data and Convert to Json
