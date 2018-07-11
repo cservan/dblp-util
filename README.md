@@ -4,7 +4,7 @@ Utils for interacting with the dblp computer science bibliography
 ## Usage
 
 ```
-git clone https://github.com/yuki-koyama/dblp-util.git --recursive
+$ git clone https://github.com/yuki-koyama/dblp-util.git --recursive
 ```
 
 ### Download and Unarchive XML Data
@@ -23,4 +23,3 @@ $ make
 $ ./extract_and_convert_to_json
 ```
 
-This part is under developing.
