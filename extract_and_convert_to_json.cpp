@@ -16,6 +16,8 @@ int main(int argc, char** argv)
     
     // Specify the target journal name whose entries will be extracted
     const std::string target_journal_name { "ACM Trans. Graph." };
+    const std::string target_volume { "36" };
+    const std::string target_number { "4" };
     
     // Load the XML document
     tinyxml2::XMLDocument doc;
@@ -29,7 +31,9 @@ int main(int argc, char** argv)
         // Ignore articles from other than ACM Tranc. Graph.
         if (article_entry->FirstChildElement("journal") == nullptr) { continue; }
         if (std::string(article_entry->FirstChildElement("journal")->GetText()) != target_journal_name) { continue; }
-        
+        if (std::string(article_entry->FirstChildElement("volume")->GetText()) != target_volume) { continue; }
+        if (std::string(article_entry->FirstChildElement("number")->GetText()) != target_number) { continue; }
+
         // Ignore invalid entries
         if (article_entry->FirstChildElement("author") == nullptr) { continue; }
         if (article_entry->FirstChildElement("title" ) == nullptr) { continue; }
