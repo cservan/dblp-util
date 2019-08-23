@@ -27,6 +27,7 @@ int main(int argc, char** argv)
 //     std::vector<json11::Json> list;
     nlohmann::json to_print;
     std::vector<std::string> entry_types={"article","phdthesis"};
+//     "article","inproceedings","proceedings","book","incollection","phdthesis","mastersthesis","www","person","data"
     std::vector<std::string> entry_types_data={"author","editor","title","booktitle","pages","year","address","journal","volume","number","month","url","ee","cdrom","cite","publisher","note","crossref","isbn","series","school","chapter","publnr"};
     std::vector<std::string>::iterator iter_entry_types=entry_types.begin();
     while (iter_entry_types != entry_types.end())
