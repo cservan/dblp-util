@@ -66,8 +66,10 @@ int main(int argc, char** argv)
             }
             data_json.push_back(nlohmann::json::object_t::value_type("type",l_type));
             nlohmann::json data_json_item; 
+            
             data_json_item.push_back(nlohmann::json::object_t::value_type("fields",data_json));
-            data_json_item.push_back(nlohmann::json::object_t::value_type("put",long_id));
+            std::string std_id=std::to_string(long_id);
+            data_json_item.push_back(nlohmann::json::object_t::value_type("put","id:papers:paper::"+std_id));
             to_print.push_back(data_json_item);
         }
         iter_entry_types++;
