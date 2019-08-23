@@ -14,11 +14,6 @@ int main(int argc, char** argv)
     }
     const std::string xml_path { argv[1] };
     
-    // Specify the target journal name whose entries will be extracted
-    const std::string target_journal_name { "ACM Trans. Graph." };
-    const std::string target_volume { "36" };
-    const std::string target_number { "4" };
-    
     // Load the XML document
     tinyxml2::XMLDocument doc;
     doc.LoadFile(xml_path.c_str());
@@ -26,7 +21,8 @@ int main(int argc, char** argv)
     // Instantiate a JSON object
 //     std::vector<json11::Json> list;
     nlohmann::json to_print;
-    std::vector<std::string> entry_types={"article","phdthesis"};
+    long long_id=0;
+    std::vector<std::string> entry_types={"article","phdthesis","article","inproceedings","proceedings","book","incollection","phdthesis","mastersthesis","www","person","data"};
 //     "article","inproceedings","proceedings","book","incollection","phdthesis","mastersthesis","www","person","data"
     std::vector<std::string> entry_types_data={"author","editor","title","booktitle","pages","year","address","journal","volume","number","month","url","ee","cdrom","cite","publisher","note","crossref","isbn","series","school","chapter","publnr"};
     std::vector<std::string>::iterator iter_entry_types=entry_types.begin();
@@ -35,6 +31,7 @@ int main(int argc, char** argv)
       std::string l_type=(*iter_entry_types);
         for (tinyxml2::XMLElement* article_entry = doc.FirstChildElement()->FirstChildElement(l_type.c_str()); article_entry != nullptr; article_entry = article_entry->NextSiblingElement(l_type.c_str()))
         {
+            long_id++;
             if (article_entry->FirstChildElement("author") == nullptr) { continue; }
             if (article_entry->FirstChildElement("title" ) == nullptr) { continue; }
             if (article_entry->FirstChildElement("title" )->FirstChild()->ToText() == nullptr) { continue; }
@@ -44,8 +41,7 @@ int main(int argc, char** argv)
             
             
             nlohmann::json authors = nlohmann::json::array();
-            nlohmann::json data_json ; //= nlohmann::json==obj;
-            
+            nlohmann::json data_json ; 
             
             std::vector<std::string>::iterator iter_entry_types_data=entry_types_data.begin();
             while (iter_entry_types_data != entry_types_data.end())
@@ -69,7 +65,10 @@ int main(int argc, char** argv)
                 
             }
             data_json.push_back(nlohmann::json::object_t::value_type("type",l_type));
-            to_print.push_back(data_json);
+            nlohmann::json data_json_item; 
+            data_json_item.push_back(nlohmann::json::object_t::value_type("fields",data_json));
+            data_json_item.push_back(nlohmann::json::object_t::value_type("put",long_id));
+            to_print.push_back(data_json_item);
         }
         iter_entry_types++;
     }
