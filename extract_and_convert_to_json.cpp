@@ -51,7 +51,6 @@ int main(int argc, char** argv)
             while (iter_entry_types_data != entry_types_data.end())
             {
                 std::string l_type_data=(*iter_entry_types_data);
-                std::cerr << l_type_data << std::endl;
                 if (article_entry->FirstChildElement(l_type_data.c_str()) == nullptr) { iter_entry_types_data++;continue; }
                 if (l_type_data=="author")
                 {
