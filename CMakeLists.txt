@@ -10,7 +10,7 @@ link_directories(${EXTERNAL_INSTALL_DIR}/lib)
 include_directories(${EXTERNAL_INSTALL_DIR}/include)
 
 add_executable(dblp-extractor extract_and_convert_to_json.cpp)
-target_link_libraries(dblp-extractor json11 tinyxml2)
+target_link_libraries(dblp-extractor tinyxml2)
 
 #include(ExternalProject)
 #ExternalProject_Add(
