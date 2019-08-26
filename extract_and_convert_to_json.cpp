@@ -20,12 +20,13 @@ int main(int argc, char** argv)
     
     // Instantiate a JSON object
 //     std::vector<json11::Json> list;
-    nlohmann::json to_print;
+//     nlohmann::json to_print;
     long long_id=0;
     std::vector<std::string> entry_types={"article","phdthesis","article","inproceedings","proceedings","book","incollection","phdthesis","mastersthesis","www","person","data"};
 //     "article","inproceedings","proceedings","book","incollection","phdthesis","mastersthesis","www","person","data"
     std::vector<std::string> entry_types_data={"author","editor","title","booktitle","pages","year","address","journal","volume","number","month","url","ee","cdrom","cite","publisher","note","crossref","isbn","series","school","chapter","publnr"};
     std::vector<std::string>::iterator iter_entry_types=entry_types.begin();
+    std::cout << "[" <<  std::endl;
     while (iter_entry_types != entry_types.end())
     {
       std::string l_type=(*iter_entry_types);
@@ -70,13 +71,16 @@ int main(int argc, char** argv)
             data_json_item.push_back(nlohmann::json::object_t::value_type("fields",data_json));
             std::string std_id=std::to_string(long_id);
             data_json_item.push_back(nlohmann::json::object_t::value_type("put","id:papers:paper::"+std_id));
-            to_print.push_back(data_json_item);
+            std::cout << data_json_item.dump() << std::endl;
+            std::cout << "," <<  std::endl;
+//             to_print.push_back(data_json_item);
+            
         }
         iter_entry_types++;
     }
-
+    std::cout << "]" <<  std::endl;
     // Dump the JSON object
-    std::cout << to_print.dump() << std::endl;
+//     std::cout << to_print.dump() << std::endl;
     
     return 0;
 }
