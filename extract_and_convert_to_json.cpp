@@ -49,30 +49,55 @@ int main(int argc, char** argv)
             while (iter_entry_types_data != entry_types_data.end())
             {
                 std::string l_type_data=(*iter_entry_types_data);
-                if (article_entry->FirstChildElement(l_type_data.c_str()) == nullptr) { iter_entry_types_data++;continue; }
-                if (l_type_data=="author")
+                if (l_type == "person")
                 {
-                    for (const auto* author = article_entry->FirstChildElement("author"); author != nullptr; author = author->NextSiblingElement("author"))
+                    if (article_entry->FirstChildElement(l_type_data.c_str()) == nullptr) { iter_entry_types_data++;continue; }
+                    if (l_type_data=="author")
                     {
-                        authors.push_back(author->GetText());
+                        for (const auto* author = article_entry->FirstChildElement("author"); author != nullptr; author = author->NextSiblingElement("author"))
+                        {
+                            authors.push_back(author->GetText());
+                        }
+                        data_json.push_back(nlohmann::json::object_t::value_type(std::string("authors"), authors));
                     }
-                    data_json.push_back(nlohmann::json::object_t::value_type(std::string("authors"), authors));
+                    if (l_type_data=="title" || l_type_data=="year" || l_type_data=="month")
+                    {
+                        std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
+                        data_json.push_back(nlohmann::json::object_t::value_type(std::string(l_type_data), l_string_data));
+                    }
+                    if (l_type_data=="booktitle" || l_type_data=="journal")
+                    {
+                        std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
+                        data_json.push_back(nlohmann::json::object_t::value_type(std::string("source"), l_string_data));
+                    }
+                    if (l_type_data=="url" || l_type_data=="ee" || l_type_data=="cdrom")
+                    {
+                        std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
+                        if ((int)l_string_data.find("http") > -1 || (int)l_string_data.find("www") > -1) data_json.push_back(nlohmann::json::object_t::value_type(std::string("url"), l_string_data));
+                    }
                 }
-                if (l_type_data=="title")
+                else
                 {
-                    std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
-                    data_json.push_back(nlohmann::json::object_t::value_type(std::string(l_type_data), l_string_data));
+                    if (l_type_data=="author")
+                    {
+                        std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
+                        data_json.push_back(nlohmann::json::object_t::value_type(std::string("title"), l_string_data));
+                    }
+                    if (l_type_data=="url" || l_type_data=="ee" || l_type_data=="cdrom")
+                    {
+                        std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
+                        if ((int)l_string_data.find("http") > -1 || (int)l_string_data.find("www") > -1) data_json.push_back(nlohmann::json::object_t::value_type(std::string("url"), l_string_data));
+                    }
+                    if (l_type_data=="school")
+                    {
+                        std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
+                        data_json.push_back(nlohmann::json::object_t::value_type(std::string(l_type_data), l_string_data));
+                    }
                 }
-                if (l_type_data=="url" || l_type_data=="ee" || l_type_data=="cdrom")
-                {
-                    std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
-                    if ((int)l_string_data.find("http") > -1 || (int)l_string_data.find("www") > -1) data_json.push_back(nlohmann::json::object_t::value_type(std::string("url"), l_string_data));
-                }
-                if (l_type_data=="type") data_json.push_back(nlohmann::json::object_t::value_type("type",l_type));
-                iter_entry_types_data++;
-                
             }
             nlohmann::json data_json_item; 
+            data_json.push_back(nlohmann::json::object_t::value_type("type",l_type));
+            if (! data_json["url"]) data_json.push_back(nlohmann::json::object_t::value_type(std::string("url"), ""));
             data_json_item.push_back(nlohmann::json::object_t::value_type("fields",data_json));
             std::string str_id=std::to_string(long_id);
             data_json_item.push_back(nlohmann::json::object_t::value_type("put","id:papers:paper::"+str_id));
