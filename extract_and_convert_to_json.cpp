@@ -60,8 +60,8 @@ int main(int argc, char** argv)
                 }
                 if (l_type_data=="title")
                 {
-                    const auto* l_data = article_entry->FirstChildElement("title"); 
-                    data_json.push_back(nlohmann::json::object_t::value_type(std::string("title"), l_data));
+                    std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
+                    data_json.push_back(nlohmann::json::object_t::value_type(std::string(l_type_data), l_string_data));
                 }
                 if (l_type_data=="url" || l_type_data=="ee" || l_type_data=="cdrom")
                 {
