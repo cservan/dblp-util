@@ -22,11 +22,12 @@ int main(int argc, char** argv)
 //     std::vector<json11::Json> list;
 //     nlohmann::json to_print;
     long long_id=0;
-    std::vector<std::string> entry_types={"article","phdthesis","article","inproceedings","proceedings","book","incollection","phdthesis","mastersthesis","www","person","data"};
+    std::vector<std::string> entry_types={"article","phdthesis","inproceedings","proceedings","book","incollection","mastersthesis","www","person","data"};
 //     "article","inproceedings","proceedings","book","incollection","phdthesis","mastersthesis","www","person","data"
     std::vector<std::string> entry_types_data={"author","editor","title","booktitle","pages","year","address","journal","volume","number","month","url","ee","cdrom","cite","publisher","note","crossref","isbn","series","school","chapter","publnr"};
+    std::vector<std::string> l_entry_types_data_selected={"editor","title","booktitle","year","address","journal","volume","number","month","url","ee","cdrom","cite","publisher","note","crossref","isbn","series","school","chapter"};
     std::vector<std::string>::iterator iter_entry_types=entry_types.begin();
-    std::cout << "[" <<  std::endl;
+//    std::cout << "[" <<  std::endl;
     while (iter_entry_types != entry_types.end())
     {
       std::string l_type=(*iter_entry_types);
@@ -57,28 +58,32 @@ int main(int argc, char** argv)
                     }
                     data_json.push_back(nlohmann::json::object_t::value_type(std::string("authors"), authors));
                 }
-                else
+                if (l_type_data=="title")
                 {
-                    std::string l_data=article_entry->FirstChildElement(l_type_data.c_str())->GetText();
-                    data_json.push_back(nlohmann::json::object_t::value_type(l_type_data, l_data));
+                    const auto* l_data = article_entry->FirstChildElement("title"); 
+                    data_json.push_back(nlohmann::json::object_t::value_type(std::string("title"), l_data));
                 }
+                if (l_type_data=="url" || l_type_data=="ee" || l_type_data=="cdrom")
+                {
+                    std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
+                    if ((int)l_string_data.size() > 1 ) data_json.push_back(nlohmann::json::object_t::value_type(std::string("url"), l_string_data));
+                }
+                if (l_type_data=="type") data_json.push_back(nlohmann::json::object_t::value_type("type",l_type));
                 iter_entry_types_data++;
                 
             }
-            data_json.push_back(nlohmann::json::object_t::value_type("type",l_type));
             nlohmann::json data_json_item; 
-            
             data_json_item.push_back(nlohmann::json::object_t::value_type("fields",data_json));
-            std::string std_id=std::to_string(long_id);
-            data_json_item.push_back(nlohmann::json::object_t::value_type("put","id:papers:paper::"+std_id));
+            std::string str_id=std::to_string(long_id);
+            data_json_item.push_back(nlohmann::json::object_t::value_type("put","id:papers:paper::"+str_id));
             std::cout << data_json_item.dump() << std::endl;
-            std::cout << "," <<  std::endl;
+//            std::cout << "," <<  std::endl;
 //             to_print.push_back(data_json_item);
             
         }
         iter_entry_types++;
     }
-    std::cout << "]" <<  std::endl;
+//    std::cout << "]" <<  std::endl;
     // Dump the JSON object
 //     std::cout << to_print.dump() << std::endl;
     
