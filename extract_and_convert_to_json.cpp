@@ -88,7 +88,7 @@ int main(int argc, char** argv)
                         std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
                         if ((int)l_string_data.find("http") > -1 || (int)l_string_data.find("www") > -1) data_json.push_back(nlohmann::json::object_t::value_type(std::string("url"), l_string_data));
                     }
-                    if (l_type_data=="school")
+                    if (l_type_data=="school" || l_type_data=="address")
                     {
                         std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
                         data_json.push_back(nlohmann::json::object_t::value_type(std::string(l_type_data), l_string_data));
