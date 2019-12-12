@@ -352,12 +352,12 @@ int main(int argc, char** argv)
                     if (l_type_data=="title" || l_type_data=="year" || l_type_data=="month")
                     {
                         std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
-                        data_json.push_back(nlohmann::json::object_t::value_type(std::string(l_type_data), l_string_data));
+                        data_json.push_back(nlohmann::json::object_t::value_type(std::string(l_type_data), html_decode(l_string_data)));
                     }
                     if (l_type_data=="booktitle" || l_type_data=="journal")
                     {
                         std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
-                        data_json.push_back(nlohmann::json::object_t::value_type(std::string("source"), l_string_data));
+                        data_json.push_back(nlohmann::json::object_t::value_type(std::string("source"), html_decode(l_string_data)));
                     }
                     if (l_type_data=="url" || l_type_data=="ee" || l_type_data=="cdrom")
                     {
@@ -370,7 +370,7 @@ int main(int argc, char** argv)
                     if (l_type_data=="author")
                     {
                         std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
-                        data_json.push_back(nlohmann::json::object_t::value_type(std::string("title"), l_string_data));
+                        data_json.push_back(nlohmann::json::object_t::value_type(std::string("title"), html_decode(l_string_data)));
                     }
                     if (l_type_data=="url" || l_type_data=="ee" || l_type_data=="cdrom")
                     {
@@ -380,7 +380,7 @@ int main(int argc, char** argv)
                     if (l_type_data=="school" || l_type_data=="address")
                     {
                         std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
-                        data_json.push_back(nlohmann::json::object_t::value_type(std::string(l_type_data), l_string_data));
+                        data_json.push_back(nlohmann::json::object_t::value_type(std::string(l_type_data), html_decode(l_string_data)));
                     }
                 }
                 iter_entry_types_data++;
