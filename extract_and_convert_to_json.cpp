@@ -49,9 +49,9 @@ int main(int argc, char** argv)
             while (iter_entry_types_data != entry_types_data.end())
             {
                 std::string l_type_data=(*iter_entry_types_data);
+                if (article_entry->FirstChildElement(l_type_data.c_str()) == nullptr) { iter_entry_types_data++;continue; }
                 if (l_type == "person")
                 {
-                    if (article_entry->FirstChildElement(l_type_data.c_str()) == nullptr) { iter_entry_types_data++;continue; }
                     if (l_type_data=="author")
                     {
                         for (const auto* author = article_entry->FirstChildElement("author"); author != nullptr; author = author->NextSiblingElement("author"))
@@ -94,6 +94,7 @@ int main(int argc, char** argv)
                         data_json.push_back(nlohmann::json::object_t::value_type(std::string(l_type_data), l_string_data));
                     }
                 }
+                iter_entry_types_data++;
             }
             nlohmann::json data_json_item; 
             data_json.push_back(nlohmann::json::object_t::value_type("type",l_type));
