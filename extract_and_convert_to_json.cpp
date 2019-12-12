@@ -66,7 +66,7 @@ int main(int argc, char** argv)
                 if (l_type_data=="url" || l_type_data=="ee" || l_type_data=="cdrom")
                 {
                     std::string l_string_data = article_entry->FirstChildElement(l_type_data.c_str())->GetText(); 
-                    if ((int)l_string_data.size() > 1 ) data_json.push_back(nlohmann::json::object_t::value_type(std::string("url"), l_string_data));
+                    if ((int)l_string_data.find("http") > -1 || (int)l_string_data.find("www") > -1) data_json.push_back(nlohmann::json::object_t::value_type(std::string("url"), l_string_data));
                 }
                 if (l_type_data=="type") data_json.push_back(nlohmann::json::object_t::value_type("type",l_type));
                 iter_entry_types_data++;
