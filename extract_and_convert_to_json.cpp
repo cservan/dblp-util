@@ -310,7 +310,7 @@ int main(int argc, char** argv)
 //     std::vector<json11::Json> list;
 //     nlohmann::json to_print;
     long long_id=0;
-    std::vector<std::string> entry_types={"article","phdthesis","inproceedings","proceedings","book","incollection","mastersthesis","www","person","data"};
+    std::vector<std::string> entry_types={"article","phdthesis","inproceedings","proceedings","book","incollection","mastersthesis","www","data"};
 //     "article","inproceedings","proceedings","book","incollection","phdthesis","mastersthesis","www","person","data"
     std::vector<std::string> entry_types_data={"author","editor","title","booktitle","pages","year","address","journal","volume","number","month","url","ee","cdrom","cite","publisher","note","crossref","isbn","series","school","chapter","publnr"};
     std::vector<std::string> l_entry_types_data_selected={"editor","title","booktitle","year","address","journal","volume","number","month","url","ee","cdrom","cite","publisher","note","crossref","isbn","series","school","chapter"};
@@ -338,14 +338,19 @@ int main(int argc, char** argv)
             {
                 std::string l_type_data=(*iter_entry_types_data);
                 if (article_entry->FirstChildElement(l_type_data.c_str()) == nullptr) { iter_entry_types_data++;continue; }
-                if (l_type != "person")
+                if (l_type != "www")
                 {
                     if (l_type_data=="author")
                     {
                         for (const auto* author = article_entry->FirstChildElement("author"); author != nullptr; author = author->NextSiblingElement("author"))
                         {
                             std::string l_tmp(author->GetText());
-                            authors.push_back(html_decode(l_tmp));
+                            nlohmann::json authors_data;
+                            std::string str_first_name=l_tmp.substr(l_tmp.find(" "));
+                            std::string str_last_name=l_tmp.substr(l_tmp.rfind(" "),l_tmp.size());
+                            authors_data.push_back(nlohmann::json::object_t::value_type(std::string("first_name"), html_decode(str_first_name)));
+                            authors_data.push_back(nlohmann::json::object_t::value_type(std::string("last_name"), html_decode(str_first_name)));
+                            authors.push_back(authors_data);
                         }
                         data_json.push_back(nlohmann::json::object_t::value_type(std::string("authors"), authors));
                     }
@@ -386,7 +391,8 @@ int main(int argc, char** argv)
                 iter_entry_types_data++;
             }
             nlohmann::json data_json_item; 
-            data_json.push_back(nlohmann::json::object_t::value_type("type",l_type));
+            if (l_type != "www") data_json.push_back(nlohmann::json::object_t::value_type("type",l_type));
+            else data_json.push_back(nlohmann::json::object_t::value_type("type","person"));
             if (data_json.find("url") == data_json.end()) data_json.push_back(nlohmann::json::object_t::value_type(std::string("url"), ""));
             data_json_item.push_back(nlohmann::json::object_t::value_type("fields",data_json));
             std::string str_id=std::to_string(long_id);
